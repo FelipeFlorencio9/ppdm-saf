@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">TripApp</string>
+    <string name="login">Login</string>
+    <string name="login_info">Please sign in to continue.</string>
+    <string name="outline_email">Email</string>
+    <string name="outline_password">Password</string>
+    <string name="sing_in_button">Sign In</string>
+    <string name="sign_in_info">Don’t have an account?</string>
+    <string name="sign_up_link">Sign Up</string>
 </resources>
