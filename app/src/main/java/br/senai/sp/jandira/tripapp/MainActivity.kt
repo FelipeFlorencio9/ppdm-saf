@@ -1,34 +1,37 @@
 package br.senai.sp.jandira.tripapp
 
-import android.icu.text.AlphabeticIndex.Bucket.LabelType
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.textInputServiceFactory
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.senai.sp.jandira.tripapp.ui.theme.TripAppTheme
+import br.senai.sp.jandira.tripapp.ui.theme.*
 
 class MainActivity : ComponentActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
         setContent {
             TripAppTheme {
                 TripMainScreen()
@@ -40,6 +43,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TripMainScreen(){
 
+    val context = LocalContext.current
+
+    var emailState = remember {
+        mutableStateOf("")
+    }
     Surface(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -56,7 +64,7 @@ fun TripMainScreen(){
             ) {
                 Card (
                     modifier = Modifier.size(
-                        height = 50.dp,
+                        height = 40.dp,
                         width = 120.dp),
                     backgroundColor = Color(
                         red = 207,
@@ -68,11 +76,13 @@ fun TripMainScreen(){
                 ){
 
                 }
-            }
+            } // fim do header
             //Form
-            Column(modifier = Modifier
+            Column(
+                modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(16.dp),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
                 //Login
                 Column(
@@ -83,7 +93,8 @@ fun TripMainScreen(){
                         text = stringResource(id = R.string.login),
                         color = colorResource(id = R.color.purple_default),
                         fontSize = 64.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = PoppinsBold
                     )
                     Spacer(
                         modifier = Modifier
@@ -94,50 +105,66 @@ fun TripMainScreen(){
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(id = R.string.login_info),
                         color = colorResource(id = R.color.grey_default),
-                        fontSize = 16.sp
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = PoppinsRegular
                     )
-                }
+                } // Fim do Login
                 Spacer(modifier = Modifier
                     .fillMaxWidth()
-                    .height(128.dp))
+                    .height(64.dp))
                 //Inputs
                 Column(
 
                 ) {
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
-                        value = stringResource(id = R.string.outline_email),
+                        value = "",
                         onValueChange = {},
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        label = {
+                                Text(
+                                    text = stringResource(id = R.string.outline_email),
+                                    fontFamily = PoppinsRegular
+                                )
+                        },
                         leadingIcon = {
-                            Image(
+                            Icon(
                                 modifier = Modifier.size(24.dp),
-                                painter = painterResource(id = R.drawable.email),
-                                contentDescription = ""
+                                painter = painterResource(id = R.drawable.email_24),
+                                contentDescription = stringResource(id = R.string.email_description),
+                                tint = Color(207, 1, 248)
                             )
                         }
                     )
                     Spacer(modifier = Modifier
                         .fillMaxWidth()
-                        .height(36.dp))
+                        .height(16.dp))
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
-                        value = stringResource(id = R.string.outline_password),
+                        value = "",
                         onValueChange = {},
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        label = {
+                            Text(
+                                text = stringResource(id = R.string.outline_password),
+                                fontFamily = PoppinsRegular
+                                )
+                        },
                         leadingIcon = {
-                            Image(
+                            Icon(
                                 modifier = Modifier.size(24.dp),
-                                painter = painterResource(id = R.drawable.password),
-                                contentDescription = ""
+                                painter = painterResource(id = R.drawable.password_24),
+                                contentDescription = stringResource(id = R.string.password_description),
+                                tint = Color(207, 1, 248)
                             )
                         }
                     )
 
-                }
+                } // Fim dos inputs
                 Spacer(modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp))
+                    .height(64.dp))
                 //User
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -145,29 +172,45 @@ fun TripMainScreen(){
                 ) {
                     Button(
                         onClick = { /*TODO*/ },
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(Color(207,6,240))
                     ) {
-                        Text(text = stringResource(id = R.string.sing_in_button))
-
+                        Row(){
+                            Text(
+                                text = stringResource(id = R.string.sing_in_button).uppercase(),
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontFamily = PoppinsBold
+                                )
+                            Icon(
+                                painter = painterResource(id = R.drawable.arrow_forward_24),
+                                contentDescription = stringResource(id = R.string.outline_email),
+                                tint = Color.White
+                            )
+                        }
                     }
                     Spacer(modifier = Modifier
                         .fillMaxWidth()
-                        .height(12.dp))
+                        .height(24.dp))
                     Row(){
                         Text(
-                            text = stringResource(id = R.string.sign_in_info)
+                            text = stringResource(id = R.string.sign_in_info),
+                            fontFamily = PoppinsRegular
                         )
                         Spacer(
-                            modifier = Modifier.width(6.dp))
-
+                            modifier = Modifier.width(8.dp))
                         Text(
-                            text = stringResource(id = R.string.sign_up_link)
+                            text = stringResource(id = R.string.sign_up_title),
+                            modifier = Modifier.clickable {
+                                val intent = Intent(context, SignUpActivity::class.java)
+                                context.startActivity(intent)
+                            },
+                            fontFamily = PoppinsRegular,
+                            color = Color(207,6,240)
                         )
                     }
-
-
-                }
-            }
+                } // Fim do User
+            } // Fim do Form
             //Footer
             Column(
                 modifier = Modifier
@@ -177,7 +220,7 @@ fun TripMainScreen(){
             ) {
                 Card (
                     modifier = Modifier.size(
-                        height = 50.dp,
+                        height = 40.dp,
                         width = 120.dp),
                     backgroundColor = Color(
                         red = 207,
@@ -186,8 +229,8 @@ fun TripMainScreen(){
                     shape = RoundedCornerShape(
                         topEnd = 20.dp)
                 ){}
-            }
-        }
+            } // fim do Footer
+        } // fim do Body
     }
 }
 

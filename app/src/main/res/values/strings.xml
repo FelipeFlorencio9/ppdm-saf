@@ -3,8 +3,18 @@
     <string name="login">Login</string>
     <string name="login_info">Please sign in to continue.</string>
     <string name="outline_email">E-mail</string>
+    <string name="email_description">E-mail Icon</string>
     <string name="outline_password">Password</string>
+    <string name="password_description">Password Icon</string>
     <string name="sing_in_button">Sign In</string>
     <string name="sign_in_info">Don’t have an account?</string>
-    <string name="sign_up_link">Sign Up</string>
+    <string name="sign_up_title">Sign Up</string>
+    <string name="sign_up_link">Create new account</string>
+    <string name="title_activity_sign_up">Sign Up </string>
+    <string name="username_outline">Username</string>
+    <string name="phone_outline">Phone</string>
+    <string name="email_outline">E-mail</string>
+    <string name="age_validation_check">Over 18?</string>
+    <string name="create_account">Create account</string>
+
 </resources>
