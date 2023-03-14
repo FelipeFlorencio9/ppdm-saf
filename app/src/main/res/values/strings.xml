@@ -16,5 +16,8 @@
     <string name="email_outline">E-mail</string>
     <string name="age_validation_check">Over 18?</string>
     <string name="create_account">Create account</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="user_susanna">Susanna Hoffs</string>
+
 
 </resources>
