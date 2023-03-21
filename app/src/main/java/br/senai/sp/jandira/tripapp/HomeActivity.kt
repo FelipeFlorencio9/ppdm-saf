@@ -28,7 +28,7 @@ class HomeActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    HomeScreen()
+                    Profile()
                 }
             }
         }
@@ -38,7 +38,7 @@ class HomeActivity : ComponentActivity() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun HomeScreen() {
+fun Profile() {
     //Body
     Column(
         modifier = Modifier.background(Color.Green)
@@ -54,3 +54,4 @@ fun HomeScreen() {
         }
     }
 }
+
