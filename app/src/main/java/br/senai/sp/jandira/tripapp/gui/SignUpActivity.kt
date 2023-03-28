@@ -1,24 +1,30 @@
-package br.senai.sp.jandira.tripapp
+package br.senai.sp.jandira.tripapp.gui
 
 import android.content.Intent
 import android.os.Bundle
+import android.service.carrier.CarrierService
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.senai.sp.jandira.tripapp.R
 import br.senai.sp.jandira.tripapp.ui.theme.*
 
 class SignUpActivity : ComponentActivity() {
@@ -41,6 +47,7 @@ class SignUpActivity : ComponentActivity() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SignUpScreen() {
+//    var scrollState by rememberScrollState()
     //Body
     Column(
         verticalArrangement = Arrangement.SpaceBetween
@@ -86,6 +93,22 @@ fun SignUpScreen() {
                 fontFamily = PoppinsRegular,
                 lineHeight = 18.sp
             )
+            Spacer(modifier = Modifier.height(32.dp))
+            Box(){
+                Card(
+                    modifier = Modifier.size(100.dp),
+                    shape = CircleShape,
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.profile),
+                        contentDescription = null
+                        )
+                }
+                Image(
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    painter = painterResource(id = R.drawable.baseline_add_a_photo_24),
+                    contentDescription = null)
+            }
         }
         //Forms
         Column(
@@ -191,6 +214,7 @@ fun SignUpScreen() {
                     fontFamily = PoppinsRegular
                 )
             }
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         Column(
@@ -206,10 +230,10 @@ fun SignUpScreen() {
                 colors = ButtonDefaults.buttonColors(Color(207,6,240))
             ) {
                 Text(
-                        text = stringResource(id = R.string.create_account).uppercase(),
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontFamily = PoppinsBold
+                    text = stringResource(id = R.string.create_account).uppercase(),
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontFamily = PoppinsBold
                 )
             }
             Spacer(
@@ -233,6 +257,8 @@ fun SignUpScreen() {
                 )
             }
         }
+
+
         //Footer
         Column(
             modifier = Modifier

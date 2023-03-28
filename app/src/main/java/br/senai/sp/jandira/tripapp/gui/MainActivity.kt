@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.tripapp
+package br.senai.sp.jandira.tripapp.gui
 
 import android.content.Intent
 import android.os.Bundle
@@ -22,6 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.senai.sp.jandira.tripapp.R
+import br.senai.sp.jandira.tripapp.components.BottomShape
+import br.senai.sp.jandira.tripapp.components.TopShape
 import br.senai.sp.jandira.tripapp.ui.theme.*
 
 class MainActivity : ComponentActivity() {
@@ -29,9 +32,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
         setContent {
             TripAppTheme {
                 TripMainScreen()
@@ -62,26 +62,13 @@ fun TripMainScreen(){
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.End
             ) {
-                Card (
-                    modifier = Modifier.size(
-                        height = 40.dp,
-                        width = 120.dp),
-                    backgroundColor = Color(
-                        red = 207,
-                        green = 6,
-                        blue = 240),
-                    shape = RoundedCornerShape(
-                        bottomStart = 20.dp
-                    )
-                ){
-
-                }
+                TopShape()
             } // fim do header
             //Form
             Column(
                 modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 //Login
@@ -135,7 +122,12 @@ fun TripMainScreen(){
                                 contentDescription = stringResource(id = R.string.email_description),
                                 tint = Color(207, 1, 248)
                             )
-                        }
+                        },
+                        colors = TextFieldDefaults
+                            .outlinedTextFieldColors(
+                                focusedBorderColor = RoseDefault,
+                                unfocusedBorderColor = RoseDefault
+                            )
                     )
                     Spacer(modifier = Modifier
                         .fillMaxWidth()
@@ -158,7 +150,11 @@ fun TripMainScreen(){
                                 contentDescription = stringResource(id = R.string.password_description),
                                 tint = Color(207, 1, 248)
                             )
-                        }
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = RoseDefault,
+                            unfocusedBorderColor = RoseDefault
+                        )
                     )
 
                 } // Fim dos inputs
@@ -218,17 +214,7 @@ fun TripMainScreen(){
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start,
             ) {
-                Card (
-                    modifier = Modifier.size(
-                        height = 40.dp,
-                        width = 120.dp),
-                    backgroundColor = Color(
-                        red = 207,
-                        green = 6,
-                        blue =  240),
-                    shape = RoundedCornerShape(
-                        topEnd = 20.dp)
-                ){}
+                BottomShape()
             } // fim do Footer
         } // fim do Body
     }

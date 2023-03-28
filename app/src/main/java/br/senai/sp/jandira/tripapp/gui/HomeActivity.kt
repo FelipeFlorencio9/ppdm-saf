@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.tripapp
+package br.senai.sp.jandira.tripapp.gui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import br.senai.sp.jandira.tripapp.R
 import br.senai.sp.jandira.tripapp.ui.theme.TripAppTheme
 
 class HomeActivity : ComponentActivity() {
@@ -43,15 +44,7 @@ fun Profile() {
     Column(
         modifier = Modifier.background(Color.Green)
     ) {
-        //Profile
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Image(painter = painterResource(id = R.drawable.susanna_hoffs), contentDescription = stringResource(
-                id = R.string.user_susanna)
-            )
-        }
+
     }
 }
 
