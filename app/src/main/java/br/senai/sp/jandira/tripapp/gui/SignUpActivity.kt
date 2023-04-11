@@ -2,6 +2,7 @@ package br.senai.sp.jandira.tripapp.gui
 
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -95,7 +96,10 @@ fun saveUser(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SignUpScreen() {
-//    var scrollState by rememberScrollState()
+
+    var photoUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
     //Body
     var userNameState by remember {
         mutableStateOf("")
