@@ -1,8 +1,8 @@
 package br.senai.sp.jandira.tripapp.gui
 
-import android.content.Intent
+
+import android.content.Context
 import android.os.Bundle
-import android.service.carrier.CarrierService
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,18 +10,18 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,42 +34,86 @@ class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val user = User(
-            userName = "Felipe Florencio",
-            email = "felipe@email.com",
-            password = "123456",
-            phone = "(11)99999-9999",
-            isOver18 = true
-        )
-        val userRep = UserRepository(context = this)
-        var id = userRep.save(user)
-
-        Toast.makeText(
-            this,
-            "$id",
-            Toast.LENGTH_LONG
-        ).show()
-
-
         setContent {
             TripAppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                   SignUpScreen()
+                    SignUpScreen()
                 }
             }
         }
     }
 }
 
+fun saveUser(
+    userName: String,
+    phone: String,
+    email: String,
+    password: String,
+    isOver18: Boolean,
+    context: Context
+) {
+    
+    //Criando um objeto User
+    val newUser = User(
+        id = 0,
+        userName = userName,
+        phone = phone,
+        email = email,
+        password = password,
+        isOver18 = isOver18
+    )
+
+    //Criando uma instancia ado repositório
+
+    val userRepository = UserRepository(context = context)
+
+    //Verificar se o usuário já existe
+    val user = userRepository.findUserByEmail(email)
+
+
+    //Salvar o usuario
+    if (user == null){
+        val id = userRepository.save(newUser)
+        Toast.makeText(
+            context,
+            "Created User #$id",
+            Toast.LENGTH_SHORT
+        ).show()
+    } else{
+        Toast.makeText(
+            context,
+            "User already exists!",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+}
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SignUpScreen() {
 //    var scrollState by rememberScrollState()
     //Body
+    var userNameState by remember {
+        mutableStateOf("")
+    }
+    var emailState by remember {
+        mutableStateOf("")
+    }
+    var passwordState by remember {
+        mutableStateOf("")
+    }
+    var phoneState by remember {
+        mutableStateOf("")
+    }
+    var over18State by remember {
+        mutableStateOf(false)
+    }
+    val context = LocalContext.current
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -79,18 +123,20 @@ fun SignUpScreen() {
             horizontalArrangement = Arrangement.End
         )
         {
-            Card (
+            Card(
                 modifier = Modifier.size(
                     height = 40.dp,
-                    width = 120.dp),
+                    width = 120.dp
+                ),
                 backgroundColor = Color(
                     red = 207,
                     green = 6,
-                    blue = 240),
+                    blue = 240
+                ),
                 shape = RoundedCornerShape(
                     bottomStart = 20.dp
                 )
-            ){}
+            ) {}
         }
         // Header
         Column(
@@ -115,7 +161,7 @@ fun SignUpScreen() {
                 lineHeight = 18.sp
             )
             Spacer(modifier = Modifier.height(32.dp))
-            Box(){
+            Box {
                 Card(
                     modifier = Modifier.size(100.dp),
                     shape = CircleShape,
@@ -123,12 +169,13 @@ fun SignUpScreen() {
                     Image(
                         painter = painterResource(id = R.drawable.profile),
                         contentDescription = null
-                        )
+                    )
                 }
                 Image(
                     modifier = Modifier.align(Alignment.BottomEnd),
                     painter = painterResource(id = R.drawable.baseline_add_a_photo_24),
-                    contentDescription = null)
+                    contentDescription = null
+                )
             }
         }
         //Forms
@@ -138,8 +185,10 @@ fun SignUpScreen() {
         ) {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
+                value = userNameState,
+                onValueChange = {
+                    userNameState = it
+                },
                 shape = RoundedCornerShape(16.dp),
                 label = {
                     Text(
@@ -158,8 +207,10 @@ fun SignUpScreen() {
             )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
+                value = phoneState,
+                onValueChange = {
+                    phoneState = it
+                },
                 shape = RoundedCornerShape(16.dp),
                 label = {
                     Text(
@@ -174,12 +225,13 @@ fun SignUpScreen() {
                         contentDescription = stringResource(id = R.string.phone_outline),
                         tint = Color(207, 1, 248)
                     )
-                }
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
             )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
+                value = emailState,
+                onValueChange = { emailState = it },
                 shape = RoundedCornerShape(16.dp),
                 label = {
                     Text(
@@ -198,9 +250,10 @@ fun SignUpScreen() {
             )
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
+                value = passwordState,
+                onValueChange = { passwordState = it },
                 shape = RoundedCornerShape(16.dp),
+                visualTransformation = PasswordVisualTransformation(),
                 label = {
                     Text(
                         text = stringResource(id = R.string.outline_password),
@@ -225,8 +278,10 @@ fun SignUpScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
+                    checked = over18State,
+                    onCheckedChange = {
+                        over18State = it
+                    },
                 )
                 Text(
                     text = stringResource(id = R.string.age_validation_check),
@@ -244,11 +299,20 @@ fun SignUpScreen() {
         ) {
 
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    saveUser(
+                        userName = userNameState,
+                        phone = phoneState,
+                        email = emailState,
+                        password = passwordState,
+                        isOver18 = over18State,
+                        context = context
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(Color(207,6,240))
+                colors = ButtonDefaults.buttonColors(Color(207, 6, 240))
             ) {
                 Text(
                     text = stringResource(id = R.string.create_account).uppercase(),
@@ -261,20 +325,21 @@ fun SignUpScreen() {
                 modifier = Modifier
                     .height(32.dp)
             )
-            Row(){
+            Row {
                 Text(
                     text = stringResource(id = R.string.sign_in_info),
                     fontFamily = PoppinsRegular
                 )
                 Spacer(
-                    modifier = Modifier.width(8.dp))
+                    modifier = Modifier.width(8.dp)
+                )
                 Text(
                     text = stringResource(id = R.string.sing_in_button),
                     modifier = Modifier.clickable {
 
                     },
                     fontFamily = PoppinsRegular,
-                    color = Color(207,6,240)
+                    color = Color(207, 6, 240)
                 )
             }
         }
@@ -287,17 +352,20 @@ fun SignUpScreen() {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
         ) {
-            Card (
+            Card(
                 modifier = Modifier.size(
                     height = 40.dp,
-                    width = 120.dp),
+                    width = 120.dp
+                ),
                 backgroundColor = Color(
                     red = 207,
                     green = 6,
-                    blue =  240),
+                    blue = 240
+                ),
                 shape = RoundedCornerShape(
-                    topEnd = 20.dp)
-            ){}
+                    topEnd = 20.dp
+                )
+            ) {}
         }
     }
 }

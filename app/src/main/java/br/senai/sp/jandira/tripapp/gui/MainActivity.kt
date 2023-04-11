@@ -1,16 +1,16 @@
 package br.senai.sp.jandira.tripapp.gui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,12 +19,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.tripapp.R
 import br.senai.sp.jandira.tripapp.components.BottomShape
 import br.senai.sp.jandira.tripapp.components.TopShape
+import br.senai.sp.jandira.tripapp.repository.UserRepository
 import br.senai.sp.jandira.tripapp.ui.theme.*
 
 class MainActivity : ComponentActivity() {
@@ -39,18 +41,48 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+fun authenticate(
+    email: String,
+    password : String,
+    context : Context
+
+){
+
+    val userRepository = UserRepository(context = context)
+    val authenticate = userRepository.authenticate(email, password)
+
+    if(authenticate == null){
+        Toast.makeText(
+            context,
+            "Email e/ou senha incorreto(s)",
+            Toast.LENGTH_SHORT
+        ).show()
+    } else{
+        val intent = Intent(context, HomeActivity::class.java)
+        context.startActivity(intent)
+    }
+
+
+}
 @Preview(showSystemUi = true)
 @Composable
 fun TripMainScreen(){
 
     val context = LocalContext.current
 
-    var emailState = remember {
-        mutableStateOf("")
-    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
     ) {
+
+        var emailState by remember {
+            mutableStateOf("")
+        }
+        var passwordState by remember {
+            mutableStateOf("")
+        }
+        val context = LocalContext.current
         //Body
         Column(
             modifier = Modifier
@@ -101,19 +133,19 @@ fun TripMainScreen(){
                     .fillMaxWidth()
                     .height(64.dp))
                 //Inputs
-                Column(
-
-                ) {
+                Column {
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
-                        value = "",
-                        onValueChange = {},
+                        value = emailState,
+                        onValueChange = {
+                            emailState = it
+                        },
                         shape = RoundedCornerShape(16.dp),
                         label = {
-                                Text(
-                                    text = stringResource(id = R.string.outline_email),
-                                    fontFamily = PoppinsRegular
-                                )
+                            Text(
+                                text = stringResource(id = R.string.outline_email),
+                                fontFamily = PoppinsRegular
+                            )
                         },
                         leadingIcon = {
                             Icon(
@@ -131,17 +163,20 @@ fun TripMainScreen(){
                     )
                     Spacer(modifier = Modifier
                         .fillMaxWidth()
-                        .height(16.dp))
+                        .height(16.dp)
+                    )
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
-                        value = "",
-                        onValueChange = {},
+                        value = passwordState,
+                        onValueChange = {
+                            passwordState = it
+                        },
                         shape = RoundedCornerShape(16.dp),
                         label = {
                             Text(
                                 text = stringResource(id = R.string.outline_password),
                                 fontFamily = PoppinsRegular
-                                )
+                            )
                         },
                         leadingIcon = {
                             Icon(
@@ -151,12 +186,11 @@ fun TripMainScreen(){
                                 tint = Color(207, 1, 248)
                             )
                         },
+                        visualTransformation = PasswordVisualTransformation(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = RoseDefault,
-                            unfocusedBorderColor = RoseDefault
-                        )
+                            unfocusedBorderColor = RoseDefault)
                     )
-
                 } // Fim dos inputs
                 Spacer(modifier = Modifier
                     .fillMaxWidth()
@@ -167,11 +201,17 @@ fun TripMainScreen(){
                     horizontalAlignment = Alignment.End
                 ) {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                                  authenticate(
+                                      emailState,
+                                      passwordState,
+                                      context
+                                  )
+                        },
                         shape = RoundedCornerShape(16.dp),
                         colors = ButtonDefaults.buttonColors(Color(207,6,240))
                     ) {
-                        Row(){
+                        Row {
                             Text(
                                 text = stringResource(id = R.string.sing_in_button).uppercase(),
                                 color = Color.White,
@@ -188,7 +228,7 @@ fun TripMainScreen(){
                     Spacer(modifier = Modifier
                         .fillMaxWidth()
                         .height(24.dp))
-                    Row(){
+                    Row {
                         Text(
                             text = stringResource(id = R.string.sign_in_info),
                             fontFamily = PoppinsRegular
@@ -219,5 +259,7 @@ fun TripMainScreen(){
         } // fim do Body
     }
 }
+
+
 
 
