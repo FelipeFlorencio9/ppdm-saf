@@ -1,12 +1,16 @@
 package br.senai.sp.jandira.tripapp.gui
 
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,6 +35,8 @@ import br.senai.sp.jandira.tripapp.R
 import br.senai.sp.jandira.tripapp.model.User
 import br.senai.sp.jandira.tripapp.repository.UserRepository
 import br.senai.sp.jandira.tripapp.ui.theme.*
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 
 class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +61,8 @@ fun saveUser(
     email: String,
     password: String,
     isOver18: Boolean,
-    context: Context
+    profilePhotoUri : String,
+    context: Context,
 ) {
     
     //Criando um objeto User
@@ -64,7 +72,8 @@ fun saveUser(
         phone = phone,
         email = email,
         password = password,
-        isOver18 = isOver18
+        isOver18 = isOver18,
+        profilePhoto = profilePhotoUri
     )
 
     //Criando uma instancia ado repositório
@@ -100,6 +109,17 @@ fun SignUpScreen() {
     var photoUri by remember {
         mutableStateOf<Uri?>(null)
     }
+
+    var launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) {
+        photoUri = it
+    }
+    var painter = rememberAsyncImagePainter(
+        ImageRequest.Builder(LocalContext.current)
+            .data(photoUri)
+            .build()
+    )
     //Body
     var userNameState by remember {
         mutableStateOf("")
@@ -171,14 +191,25 @@ fun SignUpScreen() {
                     shape = CircleShape,
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.profile),
-                        contentDescription = null
+                        painter = if(photoUri == null) painterResource(id = R.drawable.profile) else painter,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop
                     )
                 }
                 Image(
-                    modifier = Modifier.align(Alignment.BottomEnd),
-                    painter = painterResource(id = R.drawable.baseline_add_a_photo_24),
-                    contentDescription = null
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .clickable {
+                            launcher.launch("image/png")
+                            var message = "nada"
+                            Log.i(
+                                "ds2m",
+                                "URI: ${photoUri?.path ?: message}"
+                            )
+                        },
+                    painter = painterResource(
+                        id = R.drawable.baseline_add_a_photo_24),
+                    contentDescription = null,
                 )
             }
         }
@@ -310,6 +341,7 @@ fun SignUpScreen() {
                         email = emailState,
                         password = passwordState,
                         isOver18 = over18State,
+                        profilePhotoUri = photoUri?.path ?: "",
                         context = context
                     )
                 },

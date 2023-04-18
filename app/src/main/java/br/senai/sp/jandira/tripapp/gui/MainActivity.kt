@@ -50,9 +50,9 @@ fun authenticate(
 ){
 
     val userRepository = UserRepository(context = context)
-    val authenticate = userRepository.authenticate(email, password)
+    val user = userRepository.authenticate(email, password)
 
-    if(authenticate == null){
+    if(user == null){
         Toast.makeText(
             context,
             "Email e/ou senha incorreto(s)",
@@ -60,6 +60,7 @@ fun authenticate(
         ).show()
     } else{
         val intent = Intent(context, HomeActivity::class.java)
+            intent.putExtra("id", user.id)
         context.startActivity(intent)
     }
 
