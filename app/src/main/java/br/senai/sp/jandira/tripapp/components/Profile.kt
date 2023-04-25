@@ -4,11 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,14 +24,15 @@ fun Profile() {
         Card(
             modifier = Modifier
                 .size(12.dp,24.dp),
-            backgroundColor = Color.Magenta
+            backgroundColor = Color.Magenta,
+            shape = RoundedCornerShape(12.dp)
         ) {
 
         }
         Image(
             modifier = Modifier.size(24.dp),
             painter = painterResource(id = R.drawable.susanna_hoffs),
-            contentDescription = stringResource(id = R.string.user_susanna),
+            contentDescription = stringResource(id = R.string.user_susanna)
         )
     }
 

@@ -18,6 +18,7 @@
     <string name="create_account">Create account</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="user_susanna">Susanna Hoffs</string>
-
-
+    <string name="categories">Categories</string>
+    <string name="search">Search your destiny</string>
+    <string name="past_trips">Past Trips</string>
 </resources>

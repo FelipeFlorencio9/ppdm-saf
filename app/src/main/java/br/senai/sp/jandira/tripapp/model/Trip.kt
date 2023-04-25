@@ -1,9 +1,20 @@
 package br.senai.sp.jandira.tripapp.model
 
 
+import android.graphics.drawable.Drawable
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import br.senai.sp.jandira.tripapp.R
+import java.time.LocalDate
+
+
+
+
 data class Trip(
-    val place : String,
-    val dateInit: String,
-    val dateEnd: String,
-    val year: Number
+    var id : Long = 0,
+    var location : String,
+    var description : String,
+    var startDate : LocalDate = LocalDate.of(2000, 1, 1) ,
+    var endDate : LocalDate = LocalDate.of(2000, 1, 1) ,
+    var image : Int = R.drawable.no_photography_24
 )
