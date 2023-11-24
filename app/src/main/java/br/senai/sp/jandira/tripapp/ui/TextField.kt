@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.tripapp.components
+package br.senai.sp.jandira.tripapp.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.senai.sp.jandira.tripapp.R
 import br.senai.sp.jandira.tripapp.ui.theme.PoppinsRegular
-import br.senai.sp.jandira.tripapp.ui.theme.RoseDefault
+import br.senai.sp.jandira.tripapp.ui.theme.GreenDefault
 
 
 @Composable
@@ -46,8 +46,8 @@ fun TextField(){
         },
         colors = TextFieldDefaults
             .outlinedTextFieldColors(
-                focusedBorderColor = RoseDefault,
-                unfocusedBorderColor = RoseDefault
+                focusedBorderColor = GreenDefault,
+                unfocusedBorderColor = GreenDefault
             )
     )
 }
